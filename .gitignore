@@ -1,0 +1,144 @@
+# =====================================================================
+#  .gitignore — macOS + Windows + IDEs / editores con IA
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# macOS
+# ---------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+*.icloud
+
+# ---------------------------------------------------------------------
+# Windows
+# ---------------------------------------------------------------------
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# ---------------------------------------------------------------------
+# Linux (por si alguien del equipo lo usa)
+# ---------------------------------------------------------------------
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ---------------------------------------------------------------------
+# VS Code
+#   Ignora todo .vscode/. Si quieres compartir config del proyecto,
+#   descomenta las excepciones de abajo.
+# ---------------------------------------------------------------------
+.vscode/
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+*.code-workspace
+.history/
+.vscode-test/
+*.vsix
+
+# ---------------------------------------------------------------------
+# Google Antigravity
+# ---------------------------------------------------------------------
+.antigravity/
+.agent/
+.gemini/
+
+# ---------------------------------------------------------------------
+# Otros editores / IDEs con IA (forks de VS Code y agentes)
+# ---------------------------------------------------------------------
+# Cursor
+.cursor/
+.cursorrules
+.cursorignore
+.cursorindexingignore
+# Windsurf / Codeium
+.windsurf/
+.windsurfrules
+.codeium/
+# Kiro (AWS)
+.kiro/
+# Claude Code
+.claude/
+CLAUDE.local.md
+# GitHub Copilot / Continue / Cline / Roo / Aider
+.copilot/
+.continue/
+.cline/
+.clinerules
+.roo/
+.aider*
+# Zed
+.zed/
+
+# ---------------------------------------------------------------------
+# JetBrains (IntelliJ, WebStorm, PyCharm, etc.)
+# ---------------------------------------------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.fleet/
+
+# ---------------------------------------------------------------------
+# Otros editores
+# ---------------------------------------------------------------------
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+Session.vim
+.netrwhist
+# Emacs
+\#*\#
+.\#*
+.projectile
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+# Visual Studio
+.vs/
+*.suo
+*.user
+
+# ---------------------------------------------------------------------
+# Archivos sensibles / locales (recomendado)
+# ---------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+.aws/
+*.log
