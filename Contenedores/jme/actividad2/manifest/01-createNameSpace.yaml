@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-act2-group
+  labels:
+    name: ns-act2-group
+    environment: dev

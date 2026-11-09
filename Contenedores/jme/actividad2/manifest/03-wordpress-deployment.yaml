@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: wordpress
+                  tier: mysql
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - image: wordpress:6.2.1-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: WORDPRESS_DB_USER
+          value: wordpress
+        - name: WORDPRESS_AUTH_KEY
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: auth-key } }
+        - name: WORDPRESS_SECURE_AUTH_KEY
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: secure-auth-key } }
+        - name: WORDPRESS_LOGGED_IN_KEY
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: logged-in-key } }
+        - name: WORDPRESS_NONCE_KEY
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: nonce-key } }
+        - name: WORDPRESS_AUTH_SALT
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: auth-salt } }
+        - name: WORDPRESS_SECURE_AUTH_SALT
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: secure-auth-salt } }
+        - name: WORDPRESS_LOGGED_IN_SALT
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: logged-in-salt } }
+        - name: WORDPRESS_NONCE_SALT
+          valueFrom: { secretKeyRef: { name: mysql-pass, key: nonce-salt } }
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        emptyDir: {}
