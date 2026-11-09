@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: todo
+      POSTGRES_PASSWORD: todo
+      POSTGRES_DB: todo
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U todo -d todo" ]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  python:
+    build: ./python
+    environment: &dbenv
+      DB_HOST: db
+      DB_USER: todo
+      DB_PASSWORD: todo
+      DB_NAME: todo
+    ports: [ "8081:8080" ]
+    depends_on:
+      db: { condition: service_healthy }
+
+  node:
+    build: ./node
+    environment: *dbenv
+    ports: [ "8082:8080" ]
+    depends_on:
+      db: { condition: service_healthy }
+
+  java:
+    build: ./java
+    environment: *dbenv
+    ports: [ "8083:8080" ]
+    depends_on:
+      db: { condition: service_healthy }
+
+  php:
+    build: ./php
+    environment: *dbenv
+    ports: [ "8084:8080" ]
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  pgdata:
