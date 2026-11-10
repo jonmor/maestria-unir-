@@ -43,9 +43,10 @@ kubectl config set-context --current --namespace=practica2-minikube
 ```
 
 
-Eliminar un perfil de minikube
+Eliminar un perfil de minikube el default se puede tambien eliminar "minikube"
 ```bash
 minikube delete -p practica2-minikube
+minikube delete -p minikube
 ```
 
 
@@ -54,9 +55,11 @@ Detener todos los cluster de minikube
 minikube stop --all
 ```
 
-Inicializar cluster cuando ya existe
+Inicializar cluster cuando ya existe "minikube start" para el caso personalizado use.
 ```bash
-minikube start
+minikube start -p practica2-minikube
+kubectl get nodes                     # practica2-minikube y -m02
+kubectl get storageclass              # debe estar csi-hostpath-sc, caso contrario crearlo con los comandos de addons
 ```
 
 
