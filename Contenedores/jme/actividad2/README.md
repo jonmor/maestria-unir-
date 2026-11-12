@@ -7,7 +7,11 @@ URL de Pagina en la que se baso el cluster de wordpress:
 https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/
 
 
+URL de generacion de salt para wordpress:
 
+https://api.wordpress.org/secret-key/1.1/salt/
+
+Revisar archivo **"00-secret.yaml"**, ahi viven los valores de salt generados que se pasan como parametros al Pod
 
 ## Notas para macOS
 
