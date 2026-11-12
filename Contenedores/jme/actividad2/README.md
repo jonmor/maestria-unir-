@@ -121,3 +121,142 @@ for p in $(kubectl get pods -n ns-act2-group -l tier=frontend -o name); do
   kubectl exec -n ns-act2-group $p -- printenv WORDPRESS_AUTH_KEY
 done
 ```
+
+
+
+```bash
+minikube stop -p practica2-minikube
+```
+
+
+
+---
+
+# Instalacion Ubuntu Linux 26.04
+
+
+### Setup docker apt
+
+```bash
+sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc docker-buildx podman-docker containerd runc | cut -f1)
+# Add Docker's official GPG key:
+sudo apt update
+sudo apt install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+```
+
+### install docker
+
+```bash
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl status docker
+sudo systemctl start docker
+```
+
+### Test docker
+
+```bash
+sudo docker run hello-world
+```
+
+### Install minikube
+
+Leer el siguiente link para detalles:
+
+https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Farm64%2Fstable%2Fbinary+download
+
+En mi caso uso arquitectura ARM64, por favor cambiar a X86-64 en caso de usarlo
+
+```bash
+curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-arm64
+sudo install minikube-linux-arm64 /usr/local/bin/minikube && rm minikube-linux-arm64
+
+```
+
+Comandos x86-64
+```bash
+curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+
+```
+
+### Verificar minikube
+
+```bash
+minikube start
+```
+
+### Comandos de instalacion para cluster de kubernetes
+
+```bash
+ARCH=$(dpkg --print-architecture)   # amd64 o arm64
+VER=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+curl -LO "https://dl.k8s.io/release/${VER}/bin/linux/${ARCH}/kubectl"
+curl -LO "https://dl.k8s.io/release/${VER}/bin/linux/${ARCH}/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check   # debe decir: kubectl: OK
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+rm kubectl kubectl.sha256
+kubectl version --client
+```
+
+---
+
+### Comandos para crear lo necesario al cluster "kubectl"
+
+```bash
+kubectl config use-context practica2-minikube
+kubectl config set-context --current --namespace=practica2-minikube
+minikube start -p practica2-minikube --driver=docker --nodes=2 --cpus=2 --memory=5g
+kubectl get nodes 
+kubectl get storageclass 
+minikube addons enable volumesnapshots -p practica2-minikube
+minikube addons enable csi-hostpath-driver -p practica2-minikube
+```
+
+---
+### Bajar datos del repositorio
+
+```bash
+git clone https://github.com/jonmor/maestria-unir-.git
+cd maestria-unir-/
+cd Contenedores/jme/actividad2/
+kubectl apply -k ./
+kubectl get all,pvc,secret -n ns-act2-group -o wide
+kubectl get svc -A
+nohup kubectl port-forward --address 0.0.0.0 svc/wordpress 8080:80 -n ns-act2-group > /tmp/pf.log 2>&1 &
+tail -200f /tmp/pf.log 
+```
+
+---
+
+### Wordpress instalation password que utilice
+```txt
+user:admin
+password: WtOKsRzmrX8vozg%cg
+```
+
+
+Comando utilizados en pruebas, **no requeridos en el proceso**
+```bash 
+minikube stop -p practica2-minikube
+minikube stop --all                  # detiene todos los perfiles
+minikube profile list                # verifica que diga Stopped
+
+minikube start -p practica2-minikube
+kubectl config use-context practica2-minikube
+kubectl get pods -n ns-act2-group -o wide
+```
