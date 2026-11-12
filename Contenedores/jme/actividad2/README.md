@@ -116,7 +116,7 @@ minikube service wordpress -n ns-act2-group -p practica2-minikube --url
 ### Verificacion de session salt
 
 Comando que utilice para verificar que el salt de sesión sea el mismo, identifique que cuando es un cluster de 2 nodos el salt es diferente y al balancear la carga pierde la sesión
-````bash
+```bash
 for p in $(kubectl get pods -n ns-act2-group -l tier=frontend -o name); do
   kubectl exec -n ns-act2-group $p -- printenv WORDPRESS_AUTH_KEY
 done
@@ -184,14 +184,12 @@ En mi caso uso arquitectura ARM64, por favor cambiar a X86-64 en caso de usarlo
 ```bash
 curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-arm64
 sudo install minikube-linux-arm64 /usr/local/bin/minikube && rm minikube-linux-arm64
-
 ```
 
 Comandos x86-64
 ```bash
 curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
-
 ```
 
 ### Verificar minikube
@@ -228,6 +226,7 @@ minikube addons enable csi-hostpath-driver -p practica2-minikube
 ```
 
 ---
+
 ### Bajar datos del repositorio
 
 ```bash
