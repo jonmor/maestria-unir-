@@ -92,8 +92,8 @@ spec:
             if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) {
                 $_SERVER['HTTPS'] = 'on';
             }
-            define('WP_HOME', 'https://wordpressunir.tsolbe.com');
-            define('WP_SITEURL', 'https://wordpressunir.tsolbe.com');
+            // define('WP_HOME', 'https://wordpressunir.tsolbe.com');
+            // define('WP_SITEURL', 'https://wordpressunir.tsolbe.com');
         ports:
         - containerPort: 80
           name: wordpress
